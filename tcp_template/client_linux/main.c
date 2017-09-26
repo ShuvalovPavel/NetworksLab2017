@@ -7,6 +7,19 @@
 
 #include <string.h>
 
+int readn(int sockfd, char* buffer, int n) {
+    int k;
+    int i;
+    for (i = 0; i < n; ++i) {
+        k = read(sockfd, buffer + i, 1);
+        if (k < 0){
+            printf("Error reading from socket \n");
+            exit(1);
+        }
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[]) {
     int sockfd, n;
     uint16_t portno;
@@ -66,13 +79,16 @@ int main(int argc, char *argv[]) {
 
     /* Now read server response */
     bzero(buffer, 256);
-    n = read(sockfd, buffer, 255);
+    n = readn(sockfd, buffer, 255);
 
     if (n < 0) {
         perror("ERROR reading from socket");
         exit(1);
     }
-
+    
+    shutdown(sockfd, 2);
+    close(sockfd);
+    
     printf("%s\n", buffer);
     return 0;
 }

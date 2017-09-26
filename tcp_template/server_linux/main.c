@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
     /* Initialize socket structure */
     bzero((char *) &serv_addr, sizeof(serv_addr));
-    portno = 5001;
+    portno = 5005;
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -70,6 +70,9 @@ int main(int argc, char *argv[]) {
         perror("ERROR writing to socket");
         exit(1);
     }
+    
+    shutdown(newsockfd, 2);
+    close(newsockfd);
 
     return 0;
 }
